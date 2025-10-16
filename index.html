@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Card</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+
+      article[data-testid="test-profile-card"] {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        max-width: 56rem;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .header-gradient {
+        background: linear-gradient(90deg, #3b82f6 0%, #9333ea 100%);
+        height: 8rem;
+      }
+
+      .content-wrapper {
+        padding: 0 1.5rem 2rem;
+      }
+
+      .profile-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-top: -4rem;
+      }
+
+      figure {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-shrink: 0;
+      }
+
+      img[data-testid="test-user-avatar"] {
+        width: 8rem;
+        height: 8rem;
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        object-fit: cover;
+      }
+
+      .profile-info {
+        flex-grow: 1;
+        padding-top: 4rem;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+
+      h2[data-testid="test-user-name"] {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.5rem;
+      }
+
+      p[data-testid="test-user-bio"] {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #4b5563;
+      }
+
+      .time-display {
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      .time-box {
+        display: inline-block;
+        background: #f3f4f6;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+      }
+
+      .time-label {
+        font-size: 0.75rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
+      }
+
+      div[data-testid="test-user-time"] {
+        font-size: 0.875rem;
+        font-family: "Courier New", monospace;
+        color: #374151;
+        margin-top: 0.25rem;
+      }
+
+      nav[data-testid="test-user-social-links"] {
+        margin-bottom: 2rem;
+      }
+
+      nav ul {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        list-style: none;
+      }
+
+      nav a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        background: #f3f4f6;
+        color: #4b5563;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+
+      nav a:hover {
+        background: #3b82f6;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      nav a:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+      }
+
+      .lists-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      section {
+        background: #fafafa;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+      }
+
+      section h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      section ul {
+        list-style: none;
+      }
+
+      section li {
+        display: flex;
+        align-items: start;
+        gap: 0.5rem;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        line-height: 1.5;
+      }
+
+      section li:last-child {
+        margin-bottom: 0;
+      }
+
+      .hobbies-list li::before {
+        content: "•";
+        color: #3b82f6;
+        font-weight: bold;
+        margin-top: 0.1rem;
+      }
+
+      .dislikes-list li::before {
+        content: "•";
+        color: #ef4444;
+        font-weight: bold;
+        margin-top: 0.1rem;
+      }
+
+      /* Icon styles */
+      .icon {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+      }
+
+      @media (min-width: 640px) {
+        .lists-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .content-wrapper {
+          padding: 0 2.5rem 2rem;
+        }
+
+        .profile-layout {
+          flex-direction: row;
+          gap: 2rem;
+        }
+
+        figure {
+          align-items: flex-start;
+        }
+
+        .profile-info {
+          padding-top: 4.5rem;
+        }
+
+        header {
+          text-align: left;
+        }
+
+        h2[data-testid="test-user-name"] {
+          font-size: 2.25rem;
+        }
+
+        p[data-testid="test-user-bio"] {
+          font-size: 1.125rem;
+        }
+
+        .time-display {
+          text-align: left;
+        }
+
+        nav ul {
+          justify-content: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <article data-testid="test-profile-card">
+      <div class="header-gradient"></div>
+
+      <div class="content-wrapper">
+        <div class="profile-layout">
+          <figure>
+            <img
+              data-testid="test-user-avatar"
+              src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzBjNWM4ZjBkZGYwZjQ5NzI3OWY0ZjVhZDU5YzU5YWQ5ZjU5YjU5YiZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/L1R1tvI9svkIWwpVYr/giphy.gif"
+              alt="Daniel Okafor's profile picture"
+            />
+          </figure>
+
+          <div class="profile-info">
+            <header>
+              <h2 data-testid="test-user-name">Daniel Okafor</h2>
+              <p data-testid="test-user-bio">
+                Full-stack developer and open source enthusiast. Passionate
+                about creating accessible web experiences and building tools
+                that make developers' lives easier. Always learning, always
+                coding.
+              </p>
+            </header>
+
+            <div class="time-display">
+              <div class="time-box">
+                <div class="time-label">Current Time</div>
+                <div data-testid="test-user-time" id="currentTime"></div>
+              </div>
+            </div>
+
+            <nav
+              data-testid="test-user-social-links"
+              aria-label="Social media links"
+            >
+              <ul>
+                <li>
+                  <a
+                    data-testid="test-user-social-github"
+                    href="https://github.com/Buch-dev"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit GitHub profile"
+                  >
+                    <svg class="icon" viewBox="0 0 24 24">
+                      <path
+                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                      ></path>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    data-testid="test-user-social-twitter"
+                    href="https://twitter.com/bucheed"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit Twitter profile"
+                  >
+                    <svg class="icon" viewBox="0 0 24 24">
+                      <path
+                        d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"
+                      ></path>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    data-testid="test-user-social-linkedin"
+                    href="https://www.linkedin.com/in/buchcodx/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit LinkedIn profile"
+                  >
+                    <svg class="icon" viewBox="0 0 24 24">
+                      <path
+                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                      ></path>
+                      <rect x="2" y="9" width="4" height="12"></rect>
+                      <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    data-testid="test-user-social-email"
+                    href="mailto:bucheed@gmail.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Send email"
+                  >
+                    <svg class="icon" viewBox="0 0 24 24">
+                      <path
+                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                      ></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            <div class="lists-grid">
+              <section>
+                <h3>
+                  <span>✨</span>
+                  Hobbies
+                </h3>
+                <ul data-testid="test-user-hobbies" class="hobbies-list">
+                  <li>Photography</li>
+                  <li>Hiking</li>
+                  <li>Reading sci-fi novels</li>
+                  <li>Playing guitar</li>
+                  <li>Cooking international cuisine</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3>
+                  <span>👎</span>
+                  Dislikes
+                </h3>
+                <ul data-testid="test-user-dislikes" class="dislikes-list">
+                  <li>Poorly documented code</li>
+                  <li>Traffic jams</li>
+                  <li>Cold coffee</li>
+                  <li>Loud noises in quiet spaces</li>
+                </ul>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <script>
+      function updateTime() {
+        const timeElement = document.getElementById("currentTime");
+        if (timeElement) {
+          timeElement.textContent = Date.now();
+        }
+      }
+
+      // Update time immediately
+      updateTime();
+
+      // Update time every second
+      setInterval(updateTime, 1000);
+    </script>
+  </body>
+</html>
